@@ -1,0 +1,133 @@
+name = "wedding-planner"
+main = "src/index.js"
+# Runtime behaviour date. From 2026-08-04 nodejs_compat (+ v2) is on by
+# default: global process/Buffer exist and, unless switched off, every var AND
+# secret is copied into process.env. The Anthropic SDK reads ANTHROPIC_*
+# settings from there (ANTHROPIC_LOG, ANTHROPIC_AUTH_TOKEN,
+# ANTHROPIC_CUSTOM_HEADERS…), so a dashboard var could silently change what it
+# sends, and any library could read the secrets. process.env therefore stays
+# empty: the Worker passes every setting explicitly from env (src/assistant.js).
+# test-assistant.mjs proves both (canary vars never reach the SDK).
+compatibility_date = "2026-11-13"
+compatibility_flags = ["nodejs_compat_do_not_populate_process_env"]
+# Don't wipe plain-text variables set in the dashboard (e.g. the Cloudflare
+# Access ones below) on every push-to-deploy. Secrets survive regardless.
+keep_vars = true
+
+# The site domain. Every host the Worker serves or links to is built from it:
+# the apex + www (guest site), plan.* (the plan portal), v1…v5.* (private
+# previews), family.* (unless FAMILY_HOST is set) and the session cookie
+# Domain=.<SITE_DOMAIN>, which lets the plan login unlock the previews.
+[vars]
+SITE_DOMAIN = "example.com"
+# The wedding's name, used in page titles, the app icon label, emails and the
+# guest pages (src/brand.js derives every branded string from these). Left
+# unset, everything falls back to neutral "Wedding Planner" wording.
+#   WEDDING_NAME        e.g. "The Smith Wedding"
+#   WEDDING_SHORT_NAME  e.g. "Smith" (also builds ids: "smith-wedding-v2" cache,
+#                       "smith-wedding-guest-code" storage, "SMITH-DEMO" sample)
+#   WEDDING_HASHTAG     optional, e.g. "#TheSmithWedding"
+WEDDING_NAME = "The Example Wedding"
+WEDDING_SHORT_NAME = "Example"
+WEDDING_HASHTAG = "#TheExampleWedding"
+
+[[d1_databases]]
+  binding = "DB"
+  database_name = "wedding-planner"
+  database_id = "00000000-0000-0000-0000-000000000000"
+  migrations_dir = "migrations"
+
+# Guest-site media: same-origin hero photos uploaded from the Guest Website
+# editor and served from /media/* on every host (apex, plan, previews).
+[[r2_buckets]]
+  binding = "MEDIA"
+  bucket_name = "wedding-media"
+
+# Fires every 15 minutes: checks the email assistant's mailbox, and sends the
+# couple's morning brief on the first run at or after its time each day.
+[triggers]
+crons = ["*/15 * * * *"]
+
+# Workers Logs: console.log/warn/error lines are stored by Cloudflare and
+# readable in the dashboard or the telemetry API (each cron run logs a one-line
+# "cron digest:" and "cron assistant:" summary). Invocation logs (one record
+# per request, with its full URL) stay OFF: URLs carry secrets here, such as
+# /mcp/<token> links and ?pt= preview tokens. Log lines go through
+# src/log-safe.js, which masks email addresses. Never log names or bodies.
+[observability]
+enabled = true
+head_sampling_rate = 1
+# Belt and braces: strip query strings (?pt=…) from any URL Cloudflare records.
+redact_query_string = true
+
+[observability.logs]
+invocation_logs = false
+# Cloudflare Access (Zero Trust) sign-in for the plan portal. When both of
+# these are set, the Worker accepts ONLY a valid Access JWT as a session and
+# the password login is switched off. Leave them unset to keep the password.
+#   ACCESS_TEAM_DOMAIN    your Zero Trust team domain, e.g. "<team>.cloudflareaccess.com"
+#   ACCESS_AUD            the Access application's Audience (AUD) tag; comma-separate
+#                         several if plan.* and the v1–v5 previews are separate apps
+#   ACCESS_ALLOWED_EMAILS optional extra allowlist (comma-separated) on top of the
+#                         Access policy
+# Either uncomment them here, or add them in the dashboard (Worker → Settings →
+# Variables and Secrets), ideally as type "Secret". keep_vars above stops
+# deploys from wiping plain-text dashboard vars too.
+# See README → "Cloudflare Access" for the full setup, including the /mcp bypass.
+# (under [vars] above)
+# ACCESS_TEAM_DOMAIN = ""
+# ACCESS_AUD = ""
+# ACCESS_ALLOWED_EMAILS = ""
+
+# Guest access-code guess limit: connections that are never counted or timed
+# out, for the couple testing the site. Set in the dashboard as a Secret (an
+# IP address is personal data, so not here):
+#   CODE_GUESS_EXEMPT_IPS  comma-separated IP addresses, e.g. "203.0.113.7"
+
+# Optional dedicated MCP hostname. Set MCP_PUBLIC_ORIGIN (e.g.
+# "https://mcp.example.com") in the dashboard and attach that hostname to this
+# Worker as a Custom Domain, OUTSIDE Cloudflare Access. New AI-assistant links
+# then use it, and on that host the Worker answers only /mcp/<token>.
+
+# Email (src/assistant.js, src/mailbox.js). One mailbox does everything: the
+# email assistant (the couple email it, Claude updates the plan and replies),
+# the morning brief, guest emails and RSVP reminders. All of it is configured
+# here, in the dashboard (Worker → Settings → Variables and Secrets) — nothing
+# is stored in the database or belongs in the repo.
+#
+# The mailbox (needed for any email):
+#   ASSISTANT_MAIL_USER       The mailbox address, e.g. "ai@example.com".
+#   ASSISTANT_MAIL_PASSWORD   Secret. Its password.
+#   ASSISTANT_IMAP_HOST       Mail server hostname, e.g. "mail.example.com"
+#                             (IMAP 993 / SMTP 465 over TLS; override with
+#                             ASSISTANT_SMTP_HOST / ASSISTANT_IMAP_PORT /
+#                             ASSISTANT_SMTP_PORT if they differ).
+#   ASSISTANT_ALLOWED_EMAILS  Comma-separated: the couple's own addresses. The
+#                             assistant acts on mail from these only, and its
+#                             replies and the brief go to these only.
+# The assistant (and the AI-written brief):
+#   ANTHROPIC_API_KEY         Secret. Claude API key (console.anthropic.com).
+# Optional:
+#   EMAIL_FROM_NAME           Sender name guests see (default "Wedding Team").
+#   EMAIL_DRY_RUN             "1" = simulation: guest emails and the brief are
+#                             logged as sent but nothing is delivered.
+#   DAILY_BRIEF_TIME          UK time for the morning brief (default "08:00").
+#   DAILY_BRIEF               "off" to stop the morning brief.
+#   ASSISTANT_DRY_RUN         "1" = the assistant replies but changes nothing.
+#   ASSISTANT_MODEL           Defaults to "claude-haiku-5-5".
+#   ASSISTANT_DAILY_LIMIT     Max emails handled per day (default 50).
+#   ASSISTANT_SENDER_AUTH     "strict" = only act when the mail server vouches
+#                             for the sender (DKIM/DMARC pass). Otherwise an
+#                             unverified sender's changes all wait for a
+#                             confirmation code sent to the couple.
+#   CHAT_CHECKIN              "off" to stop the in-app assistant's own questions
+#                             (the daily check-in and the one-off launch review).
+#   CHAT_CHECKIN_TIME         UK time for the daily check-in (default: the
+#                             brief's DAILY_BRIEF_TIME, else "08:00").
+#   CHAT_DAILY_LIMIT          Max in-app assistant replies per day (default 200).
+#   (The in-app chat uses ANTHROPIC_API_KEY and ASSISTANT_MODEL above, and the
+#   mailbox for its email fallback. PUSH_ALLOW_HOSTS is for local tests only.)
+#   ASSISTANT_AUTHSERV_ID     The mailbox server's name in its
+#                             Authentication-Results header (e.g.
+#                             "mx.example.com"); only that server's verdict
+#                             is trusted.

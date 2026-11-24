@@ -1,0 +1,387 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-ivory: #FDFBF7;
+    --color-sage: #527352;
+    --color-charcoal: #333333;
+  }
+
+  * {
+    @apply border-charcoal-200;
+  }
+
+  body {
+    @apply bg-ivory-50 text-charcoal-900 font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-medium text-charcoal-900;
+  }
+
+  h1 { @apply text-3xl md:text-4xl; }
+  h2 { @apply text-2xl md:text-3xl; }
+  h3 { @apply text-xl md:text-2xl; }
+  h4 { @apply text-lg md:text-xl; }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-sage-500 text-ivory-50 hover:bg-sage-600 focus:ring-sage-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-charcoal-100 text-charcoal-900 hover:bg-charcoal-200 focus:ring-charcoal-400;
+  }
+
+  .btn-outline {
+    @apply btn border-2 border-sage-500 text-sage-500 hover:bg-sage-50 focus:ring-sage-500;
+  }
+
+  .btn-ghost {
+    @apply btn text-charcoal-600 hover:bg-charcoal-100 focus:ring-charcoal-400;
+  }
+
+  .btn-danger {
+    @apply btn bg-red-500 text-white hover:bg-red-600 focus:ring-red-500;
+  }
+
+  .input {
+    @apply w-full px-3 py-2 border border-charcoal-300 rounded-lg bg-white text-charcoal-900 placeholder-charcoal-400
+           focus:outline-none focus:ring-2 focus:ring-sage-500 focus:border-transparent
+           transition-all duration-200;
+  }
+
+  .input-error {
+    @apply border-red-500 focus:ring-red-500;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-charcoal-700 mb-1;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-charcoal-100 overflow-hidden;
+  }
+
+  .card-header {
+    @apply px-6 py-4 border-b border-charcoal-100;
+  }
+
+  .card-body {
+    @apply p-6;
+  }
+
+  .card-footer {
+    @apply px-6 py-4 border-t border-charcoal-100 bg-ivory-50;
+  }
+
+  .table-container {
+    @apply overflow-x-auto;
+  }
+
+  .table {
+    @apply w-full text-sm text-left;
+  }
+
+  .table th {
+    @apply px-4 py-3 text-xs font-semibold text-charcoal-500 uppercase tracking-wider bg-ivory-100 border-b border-charcoal-200;
+  }
+
+  .table td {
+    @apply px-4 py-3 border-b border-charcoal-100;
+  }
+
+  .table tbody tr {
+    @apply hover:bg-ivory-50 transition-colors;
+  }
+
+  .table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-success { @apply bg-green-100 text-green-800; }
+  .badge-warning { @apply bg-amber-100 text-amber-800; }
+  .badge-danger { @apply bg-red-100 text-red-800; }
+  .badge-info { @apply bg-blue-100 text-blue-800; }
+  .badge-neutral { @apply bg-charcoal-100 text-charcoal-800; }
+  .badge-sage { @apply bg-sage-100 text-sage-800; }
+
+  .tab {
+    @apply px-4 py-2 text-sm font-medium text-charcoal-500 border-b-2 border-transparent hover:text-charcoal-700 hover:border-charcoal-300 transition-colors;
+  }
+
+  .tab-active {
+    @apply text-sage-500 border-sage-500;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 text-charcoal-600 rounded-lg hover:bg-sage-50 hover:text-sage-700 transition-colors;
+  }
+
+  .sidebar-link-active {
+    @apply bg-sage-100 text-sage-700 font-medium;
+  }
+
+  .form-group {
+    @apply mb-4;
+  }
+
+  .form-row {
+    @apply grid gap-4 md:grid-cols-2;
+  }
+
+  .select {
+    @apply input appearance-none bg-no-repeat bg-right pr-10;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+  }
+
+  .checkbox {
+    @apply h-4 w-4 text-sage-500 border-charcoal-300 rounded focus:ring-sage-500 focus:ring-2;
+  }
+
+  .radio {
+    @apply h-4 w-4 text-sage-500 border-charcoal-300 focus:ring-sage-500 focus:ring-2;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.charcoal.300') transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: theme('colors.charcoal.300');
+    border-radius: 3px;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Guest website (v3) — everything is scoped to .gs so the plan portal keeps
+   its own look. Cormorant Garamond for display, Jost for text.
+--------------------------------------------------------------------------- */
+.gs {
+  font-family: theme('fontFamily.jost');
+  font-weight: 400;
+  color: theme('colors.charcoal.800');
+  background-color: theme('colors.ivory.50');
+}
+
+.gs h1,
+.gs h2,
+.gs h3,
+.gs .font-serif,
+.gs .font-display {
+  font-family: theme('fontFamily.display');
+}
+
+:where(.gs) h1,
+:where(.gs) h2,
+:where(.gs) h3 {
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* A soft wash of sage and champagne behind the quieter screens. */
+.gs-paper {
+  background-image:
+    radial-gradient(60rem 30rem at 50% -10%, rgba(187, 205, 187, 0.35), transparent 70%),
+    radial-gradient(40rem 26rem at 100% 100%, rgba(237, 225, 191, 0.3), transparent 70%);
+  background-repeat: no-repeat;
+}
+
+@layer components {
+  .gs-eyebrow {
+    @apply text-[11px] font-medium uppercase tracking-[0.32em] text-sage-600;
+  }
+
+  .gs-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-xs font-medium uppercase tracking-[0.22em] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .gs-btn-primary {
+    @apply gs-btn bg-sage-600 text-ivory-50 shadow-sm hover:bg-sage-700 hover:shadow-md;
+  }
+
+  .gs-btn-outline {
+    @apply gs-btn border border-charcoal-300 text-charcoal-800 hover:border-sage-500 hover:text-sage-700;
+  }
+
+  .gs-btn-light {
+    @apply gs-btn bg-ivory-50 text-charcoal-900 shadow-sm hover:bg-white hover:shadow-md;
+  }
+
+  .gs-card {
+    @apply rounded-2xl border border-ivory-300 bg-white;
+    box-shadow: 0 1px 2px rgba(51, 51, 51, 0.04), 0 18px 40px -24px rgba(53, 72, 53, 0.25);
+  }
+
+  .gs-input {
+    @apply w-full rounded-xl border border-charcoal-200 bg-white px-4 py-3 text-base text-charcoal-900 placeholder-charcoal-300 transition-colors focus:border-sage-500 focus:outline-none focus:ring-2 focus:ring-sage-200;
+  }
+
+  .gs-label {
+    @apply mb-1.5 block text-[11px] font-medium uppercase tracking-[0.2em] text-charcoal-500;
+  }
+
+  .gs-hint {
+    @apply mt-1.5 text-xs text-charcoal-400;
+  }
+}
+
+.gs-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.gs-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.gs-hero-photo {
+  animation: gs-drift 28s ease-out both;
+}
+
+.gs-rise {
+  animation: gs-rise 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.gs-bob {
+  animation: gs-bob 2.4s ease-in-out infinite;
+}
+
+@keyframes gs-drift {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+
+@keyframes gs-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes gs-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .gs-hero-photo,
+  .gs-rise,
+  .gs-bob {
+    animation: none;
+  }
+}
+
+/* Print styles for day-of schedules */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  body {
+    @apply bg-white text-black;
+  }
+
+  .card {
+    @apply shadow-none border-charcoal-300;
+  }
+
+  .table th {
+    @apply bg-gray-100 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* Print: seat plan view (Seating tab). Only the #print-seat-plan element
+   prints; everything else in the app is hidden via the body class. */
+@media print {
+  body.print-seat-plan #root *:not(#print-seat-plan):not(#print-seat-plan *) {
+    display: none !important;
+  }
+  body.print-seat-plan #print-seat-plan {
+    display: block !important;
+    color: #111;
+  }
+  #print-seat-plan .print-title, #print-qr-sheet .print-title { font-size: 22px; font-weight: 600; margin-bottom: 2px; }
+  #print-seat-plan .print-sub, #print-qr-sheet .print-sub { font-size: 12px; color: #555; }
+  #print-seat-plan .print-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  #print-seat-plan .print-table { border: 1px solid #999; border-radius: 8px; padding: 10px; break-inside: avoid; }
+  #print-seat-plan .print-table-name { font-size: 15px; font-weight: 600; }
+  #print-seat-plan .print-table-meta { font-size: 11px; color: #555; margin: 2px 0 6px; }
+  #print-seat-plan .print-guests { list-style: none; padding: 0; margin: 0; font-size: 12px; line-height: 1.5; }
+  #print-seat-plan .print-empty { color: #999; font-style: italic; }
+  #print-seat-plan .print-unseated { margin-top: 16px; border-top: 1px dashed #999; padding-top: 8px; }
+}
+
+/* Print: room plan (Room plan tab). Only the #print-room-plan board prints. */
+@media print {
+  body.print-room-plan #root *:not(#print-room-plan):not(#print-room-plan *) {
+    display: none !important;
+  }
+  body.print-room-plan #print-room-plan {
+    display: block !important;
+    color: #111;
+  }
+  #print-room-plan .room-print-board { position: relative; width: 100%; border: 1px solid #999; background: #faf9f5; margin-top: 14px; }
+  #print-room-plan .room-print-table { position: absolute; border: 1.5px solid #666; border-radius: 8px; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+  #print-room-plan .room-print-round { border-radius: 50%; }
+  #print-room-plan .room-print-table-name { font-size: 11px; font-weight: 600; line-height: 1.2; padding: 0 4px; }
+  #print-room-plan .room-print-table-meta { font-size: 9px; color: #555; }
+  #print-room-plan .print-unseated { margin-top: 16px; border-top: 1px dashed #999; padding-top: 8px; }
+}
+
+/* Print: household access-code sheet (RSVP tab). */
+@media print {
+  body.print-qr-sheet #root *:not(#print-qr-sheet):not(#print-qr-sheet *) {
+    display: none !important;
+  }
+  body.print-qr-sheet #print-qr-sheet {
+    display: block !important;
+    color: #111;
+  }
+  #print-qr-sheet .print-code-row { display: flex; gap: 12px; align-items: baseline; border-bottom: 1px solid #ccc; padding: 6px 0; font-size: 12px; }
+  #print-qr-sheet .print-code-name { flex: 1; font-weight: 500; }
+  #print-qr-sheet .print-code { font-family: ui-monospace, monospace; }
+  #print-qr-sheet .print-code-payload { color: #444; }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "wedding-planner-worker",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "gen-assets": "node generate-assets.js",
+    "dev": "wrangler dev --local --port 8787",
+    "test": "node scripts/run-tests.mjs",
+    "deploy": "npm run gen-assets && wrangler deploy",
+    "check-move": "node scripts/check-move.mjs",
+    "move-decls": "node scripts/move-decls.mjs",
+    "capture": "node scripts/run-tests.mjs --only capture"
+  },
+  "devDependencies": {
+    "acorn": "^8.19.0",
+    "acorn-walk": "^8.3.5",
+    "eslint": "^9.39.5",
+    "globals": "^15.15.0",
+    "wrangler": "^4.162.0"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.133.0",
+    "postal-mime": "^4.0.8"
+  }
+}

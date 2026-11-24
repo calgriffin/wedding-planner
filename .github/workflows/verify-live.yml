@@ -1,0 +1,53 @@
+# Smoke-check the live site after every production deploy.
+#
+# Workers Builds (the push-to-deploy pipeline) reports to GitHub as a check run
+# named "Workers Builds: wedding-planner". When that check finishes
+# successfully on main, this workflow runs worker/verify-live.mjs against the
+# live site and goes red if anything is wrong, which also triggers GitHub's
+# failed-workflow email. No secrets: verify-live only makes anonymous requests.
+#
+# Note: `check_run` workflows run from the default branch's copy of this file.
+name: Verify live
+
+on:
+  check_run:
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-live
+  cancel-in-progress: false
+
+env:
+  LIVE_DOMAIN: example.com
+  LIVE_MCP_HOST: mcp.example.com
+
+jobs:
+  verify:
+    # Only the production Workers Builds check on main, and only when it passed
+    # (a failed build already shows red and nothing new went live).
+    if: >-
+      github.event_name != 'check_run' ||
+      (github.event.check_run.name == 'Workers Builds: wedding-planner' &&
+       github.event.check_run.app.slug == 'cloudflare-workers-and-pages' &&
+       github.event.check_run.conclusion == 'success' &&
+       github.event.check_run.check_suite.head_branch == 'main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.check_run.head_sha || github.sha }}
+          sparse-checkout: worker/verify-live.mjs
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: Verify the live site
+        working-directory: worker
+        env:
+          # Absorb rollout lag: each target is retried (5 s apart) before it fails.
+          VERIFY_ATTEMPTS: '8'
+        run: node verify-live.mjs

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partner One &amp; Partner Two | Thank you</title>
+<meta name="description" content="Thank you for celebrating our wedding with us.">
+<meta name="theme-color" content="#F2F3EA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161F1A" media="(prefers-color-scheme: dark)">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://example.com/">
+<meta property="og:title" content="Partner One &amp; Partner Two — We're married!">
+<meta property="og:description" content="Thank you for celebrating our wedding with us.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Partner One &amp; Partner Two — We're married!">
+<meta name="twitter:description" content="Thank you for celebrating our wedding with us.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M12 52C12 26 30 10 54 10 54 36 38 54 12 52Z' fill='%237D9382'/%3E%3Cpath d='M12 52L42 22' stroke='%23F2F3EA' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper:     #F2F3EA;
+    --ink:       #26362D;
+    --muted:     #526158;
+    --sage:      #86A08D;
+    --sage-deep: #4C6455;
+    --gold:      #9A7B3F;
+    --serif: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+    --sans:  "Jost", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    color-scheme: light dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper:     #161F1A;
+      --ink:       #ECEDE2;
+      --muted:     #A9B5AB;
+      --sage:      #7F9986;
+      --sage-deep: #9DB6A4;
+      --gold:      #C9AD6B;
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { height: 100%; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: max(2rem, env(safe-area-inset-top)) 1.25rem 1rem;
+    text-align: center;
+  }
+
+  .rings {
+    width: clamp(64px, 12vw, 96px);
+    height: auto;
+    margin-bottom: 1.75rem;
+    opacity: 0.9;
+  }
+  .rings circle {
+    fill: none;
+    stroke: var(--sage-deep);
+    stroke-width: 2;
+  }
+  .rings circle.gold {
+    stroke: var(--gold);
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2.5rem, 8vw, 3.75rem);
+    line-height: 1.08;
+    letter-spacing: 0.01em;
+    margin: 0 0 0.4em;
+    color: var(--ink);
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--sage-deep);
+  }
+
+  p.names {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 5vw, 2.1rem);
+    letter-spacing: 0.06em;
+    margin: 0 0 0.5em;
+    color: var(--sage-deep);
+  }
+  p.date {
+    margin: 0 0 1.6em;
+    font-size: 0.95rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  p.message {
+    max-width: 34rem;
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<main>
+  <svg class="rings" viewBox="0 0 120 96" aria-hidden="true">
+    <circle cx="44" cy="52" r="34"/>
+    <circle class="gold" cx="78" cy="40" r="34"/>
+  </svg>
+  <h1><em>Thank you</em></h1>
+  <p class="names">Partner One &amp; Partner Two</p>
+  <!-- The apex version renders the lawful wedding date here (e.g. "[wedding date]");
+       the v4 preview shows "We said &ldquo;I do!&rdquo;" instead. -->
+  <p class="date">We said &ldquo;I do!&rdquo;</p>
+  <p class="message">We are so grateful you shared our day with us. Thank you for celebrating the start of our married life together.</p>
+</main>
+</body>
+</html>
